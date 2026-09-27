@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="bn">
+ <style>
+.join-btn{background:linear-gradient(45deg,#ff0000,#000080);color:#fff;padding:14px 28px;border:none;border-radius:50px;font-weight:bold;font-size:16px;cursor:pointer;position:fixed;bottom:20px;right:20px;z-index:999;box-shadow:0 4px 15px rgba(0,0,0,.3)}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:1000;overflow-y:auto}
+.modal-content{background:#fff;margin:30px auto;padding:25px;border-radius:15px;max-width:500px}
+.modal-content input,.modal-content select,.modal-content textarea{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
+</style>
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>NeedyBD.com - প্রয়োজনীয় পেশার মানুষ</title>
@@ -8,7 +14,46 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Hind Siliguri',sans-serif}
-body{background:#f5f7fb}
+<button class="join-btn" onclick="document.getElementById('joinModal').style.display='block'">+ কর্মী হিসেবে যোগ দিন</button>
+
+<div id="joinModal" class="modal">
+<div class="modal-content">
+<h2 style="text-align:center;color:#000080">নিজের প্রোফাইল তৈরি করুন</h2>
+<input id="w_name" placeholder="আপনার পুরো নাম *">
+<select id="w_job"><option>পেশা নির্বাচন করুন</option><option>রাজমিস্ত্রি</option><option>ইলেকট্রিশিয়ান</option><option>প্লাম্বার</option><option>ডাক্তার</option><option>নার্স</option><option>ড্রাইভার</option></select>
+<input id="w_district" placeholder="জেলা *">
+<input id="w_phone" placeholder="ফোন নাম্বার *">
+<input id="w_exp" placeholder="অভিজ্ঞতা">
+<input id="w_fee" placeholder="ফি / মজুরি">
+<textarea id="w_desc" placeholder="আপনার সম্পর্কে লিখুন"></textarea>
+<button style="background:#000080;color:white;padding:14px;width:100%;border:none;border-radius:8px;font-weight:bold" onclick="submitWorker()">প্রোফাইল তৈরি করুন</button>
+<button style="width:100%;margin-top:10px;padding:10px;border:none;background:#eee;border-radius:8px" onclick="document.getElementById('joinModal').style.display='none'">বাতিল</button>
+</div>
+</div>
+
+<script>
+function submitWorker(){
+ const data = {
+  name: document.getElementById('w_name').value,
+  job: document.getElementById('w_job').value,
+  district: document.getElementById('w_district').value,
+  phone: document.getElementById('w_phone').value,
+  experience: document.getElementById('w_exp').value,
+  fee: document.getElementById('w_fee').value,
+  description: document.getElementById('w_desc').value,
+  verified: false,
+  timestamp: Date.now()
+ };
+ if(!data.name || data.phone.length<11){alert('নাম ও ফোন ঠিক দিন!');return;}
+ // Firebase এ save হবে
+ firebase.database().ref('workers').push(data).then(()=>{
+  alert('অভিনন্দন! প্রোফাইল তৈরি হয়েছে!');
+  document.getElementById('joinModal').style.display='none';
+  location.reload();
+ });
+}
+</script>
+ body{background:#f5f7fb}
 header{background:#111827;color:#fff;padding:25px;text-align:center}
 header h1{font-size:36px} header h1 span{color:#22c55e}
 .search{background:#fff;padding:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;box-shadow:0 4px 12px rgba(0,0,0,.08);position:sticky;top:0;z-index:10}
